@@ -53,10 +53,9 @@ web.use('/api', apiRoute(app))
 
 // No path found
 web.use(function(req, res, next) {
-  var errInternalInfo = {
+  var notFoundError = {
     method: req.method, uri: req.url, query: req.query,
-    body: req.body, authorization: req.headers.authorization,
-    statusCode: 404
+    body: req.body, statusCode: 404
   };
 
   next(notFoundError);
