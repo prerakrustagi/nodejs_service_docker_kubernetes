@@ -1,9 +1,11 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var uuid = require('uuid');
 
+var bunyan = require('bunyan');
+var bformat = require('bunyan-format');
 // Setup Core Route Handlers
-var tokenRoute = require('./api/routes/token');
-var managementRoute = require('./api/routes/management');
+var apiRoute = require('./routes/api');
 
 // WEB CONSTRUCTOR
 // Web (or WEB) represents the main "server" process of the microservice
@@ -12,6 +14,13 @@ var managementRoute = require('./api/routes/management');
 
 
 var web = express();
+
+var app = {};
+
+var formatOut = bformat({ outputMode: 'short' });
+app.syslog = bunyan.createLogger({
+  name: 'web', stream: formatOut, level: 'debug'
+});
 
 // Setup CORS headers
 web.use(function(req, res, next) {
@@ -40,9 +49,7 @@ web.use(function(req, res, next) {
 });
 
 // Map the Core Route Handlers
-web
-  .use('/management', managementRoute(app))
-  .use('/auth', tokenRoute(app));
+web.use('/api', apiRoute(app))
 
 // No path found
 web.use(function(req, res, next) {
@@ -61,4 +68,11 @@ web.use(function(err, req, res, next) {
     res.status(err.statusCode || err.code || 500);
   }
   res.send(err);
+});
+
+var port = process.env.PORT || 5000;
+
+var listner = web.listen(port, function() {
+  var port = listner.address().port;
+  app.syslog.info('Listening: port ' + port);
 });
