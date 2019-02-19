@@ -1,0 +1,22 @@
+{
+  "name": "basic_microservice_docker_kubernetes",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": "5.6.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "bunyan": "^1.8.12",
+    "bunyan-format": "^0.2.1",
+    "debug": "~2.0.0",
+    "express": "^4.16.4",
+    "q": "^1.5.1",
+    "string-template": "0.2.0",
+    "underscore": "^1.9.1",
+    "uuid": "^3.3.2"
+  }
+}
